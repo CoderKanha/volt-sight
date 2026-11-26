@@ -1,5 +1,5 @@
 [project]
-name = "backend"
+name = "volt-sight"
 version = "0.1.0"
 description = "Electricity dataset analytics and baseline ML API"
 readme = "README.md"
@@ -12,13 +12,10 @@ dependencies = [
     "uvicorn[standard]>=0.54.0",
 ]
 
-[project.scripts]
-volt-sight = "backend:main"
-
 [build-system]
 requires = ["uv_build>=0.13.10,<0.14.0"]
 build-backend = "uv_build"
 
 [tool.uv.build-backend]
-module-root = ""
-module-name = "backend"
+module-root = "."
+module-name = "app"
