@@ -1,9 +1,6 @@
-import os
-import psycopg2
-from fastapi import FastAPI, HTTPException
-from psycopg2.extras import RealDictCursor
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import data_ingestion
+from app.routers import data_ingestion, data_fetch
 
 app=FastAPI(title="VoltSight API",version="1.0.0",description="Electricity dataset analytics and baseline ML API")
 app.add_middleware(CORSMiddleware,allow_origins=["*"],allow_methods=["*"],allow_headers=["*"])
@@ -12,6 +9,7 @@ FILES={"daily":"study1_daily.csv","hourly":"study1_hourly.csv","scada":"study2_s
 
 # Register CSV ingestion API
 app.include_router(data_ingestion.router)
+app.include_router(data_fetch.router)
 
 
 @app.get("/")
