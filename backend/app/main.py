@@ -1,8 +1,20 @@
+import pickle
+from pathlib import Path
+from contextlib import asynccontextmanager
+
+from app.routers import forecast
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import data_ingestion, data_fetch
+from app.routers import data_ingestion, data_fetch, forecast
+from app.routers.forecast import lifespan
 
-app=FastAPI(title="VoltSight API",version="1.0.0",description="Electricity dataset analytics and baseline ML API")
+MODEL_PATH = (
+    Path(__file__).resolve().parents[1]
+    / "models"
+    / "power_shortage_model.pickle"
+)
+
+app=FastAPI(title="VoltSight API",version="1.0.0",description="Electricity dataset analytics and baseline ML API", lifespan=lifespan)
 app.add_middleware(CORSMiddleware,allow_origins=["*"],allow_methods=["*"],allow_headers=["*"])
 
 FILES={"daily":"study1_daily.csv","hourly":"study1_hourly.csv","scada":"study2_scada.csv","states":"study3_states.csv"}
@@ -10,6 +22,7 @@ FILES={"daily":"study1_daily.csv","hourly":"study1_hourly.csv","scada":"study2_s
 # Register CSV ingestion API
 app.include_router(data_ingestion.router)
 app.include_router(data_fetch.router)
+app.include_router(forecast.router)
 
 
 @app.get("/")
