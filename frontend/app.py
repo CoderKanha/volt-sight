@@ -7,8 +7,7 @@ pages = [
     st.Page("views/dashboard.py", title="Dashboard", icon="📊"),
     st.Page("views/eda.py", title="EDA Analytics", icon="🔎"),
     st.Page("views/insights.py", title="Data Insights", icon="💡"),
+    st.Page("views/forecast.py", title="Power Forecast", icon="⚡"),
+    st.Page("views/about.py", title="About VoltSight", icon="ℹ️")
 ]
-if Path("views/forecast.py").exists():
-    pages.append(st.Page("views/forecast.py", title="Power Forecast", icon="⚡"))
-pages.append(st.Page("views/about.py", title="About VoltSight", icon="ℹ️"))
 st.navigation(pages, position="sidebar").run()
