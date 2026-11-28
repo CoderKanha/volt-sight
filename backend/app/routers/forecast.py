@@ -53,10 +53,6 @@ def load_artifact():
     with open(MODEL_PATH, "rb") as f:
         header = f.read(100)
 
-        print("MODEL PATH:", MODEL_PATH.resolve())
-        print("MODEL SIZE:", MODEL_PATH.stat().st_size)
-        print("MODEL HEADER:", repr(header))
-
     if header.startswith(b"version https://git-lfs.github.com/spec"):
         raise RuntimeError(
             "Git LFS pointer detected instead of the actual model. "
