@@ -20,6 +20,8 @@ python -m venv .venv
 # activate environment
 pip install -r requirements.txt
 streamlit run app.py
+
+Note: To see the analytics in UI use the study1_daily.csv file when asked to updload CSV
 ```
 
 FastAPI docs: http://localhost:8000/docs | Streamlit: http://localhost:8501
