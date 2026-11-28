@@ -20,12 +20,13 @@ from app.schemas.forecast import ForecastRequest
 
 router = APIRouter(prefix="/api/v1/forecast", tags=["Forecast"])
 
-MODEL_PATH = Path(
-    os.getenv(
-        "FORECAST_MODEL_PATH",
-        "models/india_grid_forecaster.pkl"
-    )
-)
+_BACKEND_DIR = Path(__file__).resolve().parents[2]
+_model_path_env = os.getenv("FORECAST_MODEL_PATH")
+if _model_path_env:
+    _configured_path = Path(_model_path_env)
+    MODEL_PATH = _configured_path if _configured_path.is_absolute() else _BACKEND_DIR / _configured_path
+else:
+    MODEL_PATH = _BACKEND_DIR / "models" / "india_grid_forecaster.pkl"
 
 CALENDAR_COLUMNS = {
     "is_post_2023",
@@ -68,9 +69,16 @@ def load_artifact():
 
 @asynccontextmanager
 async def lifespan(app):
+    # Load both model families into the same FastAPI application.
     app.state.forecaster = load_artifact()
+
+    from app.services.grid_forecaster_service import get_grid_forecaster
+    app.state.grid_forecaster = get_grid_forecaster()
+
     yield
+
     app.state.forecaster = None
+    app.state.grid_forecaster = None
 
 
 def build_latest_features(history: list[dict], artifact: dict):

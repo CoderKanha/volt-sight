@@ -22,3 +22,21 @@ uv venv .backend
 uv add "fastapi[standard]"
 uv sync --active
 uv lock
+
+
+## Unified model runtime (legacy + handoff models)
+
+The API now serves all model endpoints in one FastAPI process. See the repository-level
+`UNIFIED_SETUP.md` for setup, shared dependency versions, model compatibility shim,
+database table names and smoke testing.
+
+Run:
+```bash
+uv lock
+uv sync
+uv run python smoke_test_models.py
+uv run uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+Python runtime: 3.13.5. The shared ML pins are NumPy 2.5.5, Pandas 3.1.1,
+Scikit-learn 1.9.1 and Joblib 1.6.0.

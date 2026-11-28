@@ -1,26 +1,25 @@
 [project]
 name = "volt-sight"
-version = "0.1.0"
-description = "Electricity dataset analytics and baseline ML API"
+version = "2.0.0"
+description = "VoltSight electricity analytics and forecasting API"
 readme = "README.md"
 authors = [
     { name = "Kanhiya Hurkat", email = "hkanhiya123@gmail.com" }
 ]
-requires-python = ">=3.11"
+requires-python = ">=3.13,<3.14"
 dependencies = [
     "fastapi[standard]>=0.165.0",
-    "lightgbm>=4.7.0",
-    "numpy>=2.4.6",
-    "pandas>=3.1.1",
-    "psycopg2>=2.9.13",
-    "psycopg2-binary>=2.9.13",
+    "lightgbm==4.7.0",
+    "numpy==2.5.5",
+    "pandas==3.1.1",
     "psycopg[binary]>=3.3.9",
     "pydantic>=2.14.4",
     "python-dotenv>=1.2.4",
     "python-multipart>=0.0.34",
-    "scikit-learn>=1.9.1",
-    "scipy>=1.17.1",
+    "scikit-learn==1.9.1",
+    "scipy==1.18.1",
     "sqlalchemy>=2.1.9",
+    "joblib==1.6.0",
 ]
 
 [build-system]
