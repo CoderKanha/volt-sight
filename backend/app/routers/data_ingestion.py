@@ -2,7 +2,10 @@ import re
 import hashlib
 from io import BytesIO
 from pathlib import Path
+from dotenv import load_dotenv
+import os
 
+from fastapi.params import Form
 import pandas as pd
 
 from fastapi import (
@@ -16,6 +19,9 @@ from fastapi import (
 from sqlalchemy import inspect
 
 from app.core.database import engine
+
+BASE_DIR = Path(__file__).resolve().parents[2]
+load_dotenv(BASE_DIR / ".env")
 
 
 router = APIRouter(
@@ -104,9 +110,17 @@ def clean_dataframe_columns(df: pd.DataFrame):
     status_code=status.HTTP_201_CREATED
 )
 async def upload_csv(
-    file: UploadFile = File(...)
+    file: UploadFile = File(...),
+    secret: str = Form(...)
 ):
 
+    # Validate Secret key to upload CSV
+    if secret != os.getenv("UPLOAD_CSV_SECRET_KEY"):
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid secret key"
+        )
+    
     # Validate file extension
     if not file.filename or not file.filename.lower().endswith(".csv"):
         raise HTTPException(
