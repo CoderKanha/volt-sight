@@ -1,22 +1,18 @@
-import os
 from datetime import date
-from io import BytesIO
 
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import requests
 import streamlit as st
-
+from utils.config import FORECAST_ENDPOINT, API_BASE_URL
+from utils.style import apply_voltsight_theme
 
 # -------------------------------------------------------------------
 # VoltSight - Next-day forecast dashboard
 # API reads the latest 14 daily records directly from Neon.
 # No historical feature fields are required from the Streamlit user.
 # -------------------------------------------------------------------
-
-API_BASE_URL = os.getenv("VOLT_SIGHT_API_URL", "http://127.0.0.1:8000").rstrip("/")
-PREDICT_ENDPOINT = f"{API_BASE_URL}/api/v1/forecast/predict"
 
 st.set_page_config(
     page_title="VoltSight | Forecast",
@@ -25,45 +21,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ---------- Styling ----------
-st.markdown(
-    """
-    <style>
-    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
-    html, body, [class*="css"] { font-family: 'DM Sans', sans-serif; }
-    .stApp { background: #07111f; color: #e8f0fb; }
-    [data-testid="stSidebar"] { background: #0b192a; border-right: 1px solid #1b3048; }
-    .hero {
-        padding: 1.5rem 1.7rem; border-radius: 20px;
-        background: radial-gradient(circle at 85% 20%, #164e63 0, transparent 34%),
-                    linear-gradient(120deg, #10243a, #102c3b 58%, #123c43);
-        border: 1px solid #24516a; margin-bottom: 1.2rem;
-    }
-    .hero-kicker { color:#68e0ce; letter-spacing: .16em; font-size:.72rem; font-weight:700; }
-    .hero-title { font-family:'Space Grotesk',sans-serif; font-size:2.25rem; font-weight:700; margin:.25rem 0; color:#f4f8ff; }
-    .hero-sub { color:#b7c9d9; font-size:.96rem; }
-    .section-title { font-family:'Space Grotesk',sans-serif; font-size:1.2rem; font-weight:600; color:#eff6ff; margin:.4rem 0 .8rem; }
-    .small-muted { color:#9bb0c4; font-size:.82rem; }
-    div[data-testid="stMetric"] {
-        background: linear-gradient(145deg,#10243a,#0d1d30);
-        border:1px solid #1d3a52; padding:15px 17px; border-radius:15px;
-    }
-    div[data-testid="stMetricLabel"] { color:#a9bfd2; }
-    div[data-testid="stMetricValue"] { color:#f4f8ff; font-family:'Space Grotesk',sans-serif; }
-    .status-pill {
-        display:inline-block; padding:5px 11px; border-radius:30px;
-        background:#103b39; color:#75ead5; border:1px solid #1e7168;
-        font-size:.78rem; font-weight:700;
-    }
-    .note {
-        background:#10263a; border:1px solid #24455f; border-radius:12px;
-        padding:12px 15px; color:#c7d7e6; font-size:.88rem;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-
+apply_voltsight_theme()
 
 # ---------- Helpers ----------
 def pretty_name(name: str) -> str:
@@ -96,7 +54,7 @@ def fetch_forecast(as_of_date=None):
 
     try:
         response = requests.post(
-            PREDICT_ENDPOINT,
+            FORECAST_ENDPOINT,
             params=params,
             timeout=(10, 180),
         )
@@ -184,7 +142,7 @@ with st.sidebar:
     st.caption("Next-day forecast")
     st.markdown("---")
     st.caption("API endpoint")
-    st.code(PREDICT_ENDPOINT, language="text")
+    st.code(FORECAST_ENDPOINT, language="text")
 
 
 # ---------- Header ----------
